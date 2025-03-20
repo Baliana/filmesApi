@@ -1,35 +1,35 @@
-'use strict'
+"use strict"
 
-async function pesquisarFilme(titulo){
-    const url = `curl https://imdb.iamidiotareyoutoo.com/search/${titulo}`
-    const response = await fetch(url) 
-    const data = await response.json() 
-    const dataDescription = data.description
-    const imgs = []
-    dataDescription.forEach(function(filme){
-        imgs.push(filme["#IMG_POSTER"])
+async function pesquisarFilmes(movies){
+
+    const url = `https://imdb.iamidiotareyoutoo.com/search?q=${movies}`
+    const response = await fetch(url)
+    const data = await response.json()
+    const filmes  = data.description
+    const filmesimg = []
+
+    filmes.forEach(function(item){
+        filmesimg.push(item['#IMG_POSTER'])
     })
-
-    return imgs
-   
+    return filmesimg
 }
-function criarImagem(link){
-    const repertorio = document.getElementById('repertorio')
-    const repertorioImg = document.createElement('img')
-    repertorioImg.src = link
-  
-    galeria.appendChild(repertorioImg)
-   
-}
-async function preencherRepertorios(){
-    const filme = document.getElementById('filme').value
-    const repertorio =  await pesquisarFilme(titulo)
-    const repertorioImg = document.getElementById('repertorioImg')
 
-    galeria.replaceChildren('')
+function criarImgFilmes(link){
+    const galeria = document.getElementById('galeria')
+    const novaImgFilmes = document.createElement('img')
+    novaImgFilmes.src = link
+    galeria.appendChild(novaImgFilmes)
+}
+
+async function preencherFotosFilmes(){
+    const movie = document.getElementById('filme').value
+    const fotosFilmes = await pesquisarFilmes(movie)
+    const galeria = document.getElementById('galeria')
 
     
-    fotos.forEach(criarImagem)
-
-
+    galeria.replaceChildren('')
+    fotosFilmes.forEach(criarImgFilmes)
 }
+
+
+document.getElementById('pesquisar').addEventListener('click', preencherFotosFilmes)
